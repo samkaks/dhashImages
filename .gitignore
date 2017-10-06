@@ -1,3 +1,9 @@
+# IntelliJ and build files
+*.iml
+.idea/workspace.xml
+.idea/libraries
+.gradle/
+
 # Java files
 *.class
 
