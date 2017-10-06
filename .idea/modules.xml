@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dhashImages.iml" filepath="$PROJECT_DIR$/.idea/modules/dhashImages.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dhashImages_main.iml" filepath="$PROJECT_DIR$/.idea/modules/dhashImages_main.iml" group="dhashImages" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dhashImages_test.iml" filepath="$PROJECT_DIR$/.idea/modules/dhashImages_test.iml" group="dhashImages" />
+    </modules>
+  </component>
+</project>
