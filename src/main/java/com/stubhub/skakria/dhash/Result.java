@@ -1,4 +1,4 @@
-package dhash;
+package com.stubhub.skakria.dhash.data;
 
 import java.net.URL;
 
@@ -19,8 +19,6 @@ public class Result {
 		this.similarity = similarity;
 		this.url = url;
 	}
-
-	
 
 	public String getFileName() {
 		return fileName;
@@ -53,6 +51,5 @@ public class Result {
 	public void setUrl(URL url) {
 		this.url = url;
 	}
-	
 
 }
