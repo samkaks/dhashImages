@@ -43,14 +43,15 @@ public class ComputeDhash {
 		greyScaleImage(bi);
 
 		// resize to a fixed width (not proportional)
-		int scaledWidth = 9;
-		int scaledHeight = 8;
+		int scaledWidth = 101;
+		int scaledHeight = 100;
 
 		BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, bi.getType());
 		// System.out.println(outputImage);
 		// System.out.println(outputImage.getAlphaRaster()!=null);
 		Graphics2D g2d = outputImage.createGraphics();
 		g2d.drawImage(bi, 0, 0, scaledWidth, scaledHeight, null);
+		dhash(outputImage);
 		g2d.dispose();
 		input.close();
 		return outputImage;
@@ -104,10 +105,10 @@ public class ComputeDhash {
 
 				if ((img.getRGB(x, y) - img.getRGB(x + 1, y)) < 0) {
 					bit.append("1");
-					// System.out.print(1 + " ");
+					System.out.print(1 + " ");
 				} else {
 					bit.append("0");
-					// System.out.print(0 + " ");
+					System.out.print(0 + " ");
 				}
 				if (bit.length() == 4) {
 					int decimal = Integer.parseInt(bit.toString(), 2);
@@ -116,7 +117,7 @@ public class ComputeDhash {
 					res.append(hexStr);
 				}
 			}
-			// System.out.println();
+			System.out.println();
 		}
 		// System.out.println();
 		return res.toString();
@@ -150,5 +151,11 @@ public class ComputeDhash {
 
 	}
 	
+	public static void main(String[] args) throws IOException{
+		String filePath="/Users/skakria/Downloads/yangers1234.jpg";
+		File f = new File(filePath);
+		findResizeAndGray(f);
+		
+	}
 
 }

@@ -10,17 +10,15 @@ public class Result {
 	URL url;
 
 	public Result() {
-		
+
 	}
-	
+
 	public Result(String filename, String filePath, Double similarity, URL url) {
 		this.fileName = filename;
 		this.filePath = filePath;
 		this.similarity = similarity;
 		this.url = url;
 	}
-
-	
 
 	public String getFileName() {
 		return fileName;
@@ -53,6 +51,5 @@ public class Result {
 	public void setUrl(URL url) {
 		this.url = url;
 	}
-	
 
 }

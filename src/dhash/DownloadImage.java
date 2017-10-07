@@ -90,13 +90,9 @@ public class DownloadImage {
 		System.out.println(results);
 
 	}
+	
+	
 
-//	public static void complicatedFindDuplicates(String imageUrl, String filePath) throws IOException {
-//		Result results = new Result(); // shall implement if we need to add
-//										// similarity coefficient in addition to
-//										// the result
-//
-//	}
 
 	public static void main(String[] args) throws IOException {
 		String imageUrl = "https://pixel.nymag.com/imgs/fashion/daily/2016/02/29/29-liu-wen.w245.h368.2x.jpg";
