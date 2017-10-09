@@ -1,4 +1,4 @@
-package dhash;
+package com.stubhub.skakria.dhash;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

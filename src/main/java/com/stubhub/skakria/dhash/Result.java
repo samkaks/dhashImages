@@ -1,4 +1,4 @@
-package com.stubhub.skakria.dhash.data;
+package com.stubhub.skakria.dhash;
 
 import java.net.URL;
 

@@ -1,4 +1,4 @@
-package dhash;
+package com.stubhub.skakria.dhash;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
