@@ -1,9 +1,25 @@
 apply plugin: 'java'
 
+sourceCompatibility = 1.8
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.stubhub.skakria.dhash.Main'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     // https://mvnrepository.com/artifact/com.mashape.unirest/unirest-java
     compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
 
     // https://mvnrepository.com/artifact/org.mockito/mockito-all
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    // https://mvnrepository.com/artifact/org.testng/testng
+    testCompile group: 'org.testng', name: 'testng', version: '6.11'
+
 }
