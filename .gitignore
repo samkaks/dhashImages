@@ -46,6 +46,7 @@ hs_err_pid*
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
+*.iml
 
 # Gradle:
 .idea/gradle.xml
@@ -74,8 +75,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-
-*.DS_Store
 .AppleDouble
 .LSOverride
 
