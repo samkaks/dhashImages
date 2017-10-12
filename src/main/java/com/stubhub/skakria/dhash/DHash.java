@@ -8,12 +8,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 
 
-public class ComputeDhash {
+public class DHash {
 
-    public static BufferedImage findResizeAndGray(File f) throws IOException {
+    private static final double SIMILARITY_THRESHOLD = 0.9;
+
+    private static BufferedImage findResizeAndGray(File f) throws IOException {
 
         // Find a suitable ImageReader
         Iterator readers = ImageIO.getImageReadersByFormatName("JPEG");
@@ -52,20 +56,7 @@ public class ComputeDhash {
         return outputImage;
     }
 
-//	public static void writeImage(BufferedImage out, String outputPathName) throws IOException {
-//
-//		File file = new File(outputPathName);
-//		if (!file.exists() && !file.mkdirs() && !file.createNewFile()) {
-//			System.out.println("Had some weird issue creating a file");
-//		}
-//
-//		String formatName = outputPathName.substring(outputPathName.lastIndexOf(".") + 1);
-//		// writes to output file
-//		ImageIO.write(out, formatName, file);
-//
-//	}
-
-    public static void greyScaleImage(BufferedImage img) { // this is bad i'll
+    private static void greyScaleImage(BufferedImage img) { // this is bad i'll
         // come fix it later
         for (int y = 0; y < img.getHeight(); y++) {
             for (int x = 0; x < img.getWidth(); x++) {
@@ -88,7 +79,7 @@ public class ComputeDhash {
 
     }
 
-    public static String dhash(BufferedImage img) {
+    private static String dhash(BufferedImage img) {
         //long startTime = System.currentTimeMillis();
         StringBuilder res = new StringBuilder();
 
@@ -118,7 +109,7 @@ public class ComputeDhash {
         return res.toString();
     }
 
-    public static double hammingDistance(String a, String b) {
+    private static double hammingDistance(String a, String b) {
         int dist = 0;
         if (a.length() != b.length())
             return -1; // have to come back and put a check here
@@ -132,19 +123,18 @@ public class ComputeDhash {
         return (1 - dist / ((double) a.length()));
     }
 
-    public static boolean isIdentical(File a, File b) throws IOException {
+    static boolean isIdentical(File a, File b) throws IOException {
         //System.out.println(b.getName());
         BufferedImage imageA = findResizeAndGray(a);
         BufferedImage imageB = findResizeAndGray(b);
         String ahash = dhash(imageA);
         String bhash = dhash(imageB);
         Double dist = hammingDistance(ahash, bhash);
-        if (dist > 0.9)
+        if (dist > SIMILARITY_THRESHOLD)
             return true;
         else
             return false;
 
     }
-
 
 }

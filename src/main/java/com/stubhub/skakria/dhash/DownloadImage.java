@@ -2,101 +2,82 @@ package com.stubhub.skakria.dhash;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.io.File.separator;
+
 public class DownloadImage {
 
-    public static void saveImage(String imageUrl, String filePath) {
-        BufferedImage image = null;
-        try {
-            File file = new File(filePath);
-            URL url = new URL(imageUrl);
-            image = ImageIO.read(url);
+    private static final String FILE_EXT = ".jpeg";
+    private static final String OUTPUT_DIR = "images";
+    private static final String URL_FILE_NAME = "url.txt";
 
-            ImageIO.write(image, "JPEG", file);
+    /**
+     * Finds the duplicates (if any) for an image at a provided URL.
+     *
+     * @param imageURL the URL of the image to look for duplicates of.
+     * @param filePath the path of the directory to output image files to.
+     * @return a list containing the file names of the duplicates found.
+     * @throws IOException if an exception occurs during IO.
+     */
+    static List<String> saveAndFindDuplicates(String imageURL, String filePath)
+            throws IOException {
+        String imageFileName = generateRandomString() + FILE_EXT;
+        String outputDirPath = filePath + separator + OUTPUT_DIR;
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        Path originalImage = Paths.get(filePath, imageFileName);
+        Path outputDir = Paths.get(outputDirPath);
+
+        Files.createDirectories(outputDir);
+
+        downloadImage(imageURL, originalImage);
+
+        List<String> urls = Files.readAllLines(Paths
+                .get(filePath, URL_FILE_NAME));
+
+        for (String url : urls) {
+            String filename = generateRandomString() + FILE_EXT;
+            Path imageFile = Paths.get(outputDirPath, filename);
+            downloadImage(url, imageFile);
         }
 
+        List<String> results = new ArrayList<>();
+
+        DirectoryStream<Path> stream = Files
+                .newDirectoryStream(outputDir);
+        for (Path entry : stream) {
+            if (Files.isRegularFile(entry) &&
+                    entry.getFileName().endsWith(FILE_EXT) &&
+                    DHash.isIdentical(originalImage.toFile(), entry.toFile()))
+                results.add(entry.getFileName().toString());
+        }
+
+        return results;
     }
 
-    private static List<String> readURLTextFile(String path) {
-        List<String> result = new ArrayList<>();
-        try (FileReader fr = new FileReader(path); BufferedReader br = new BufferedReader(fr)) {
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                result.add(line.trim());
-            }
-        } catch (IOException ie) {
-            ie.printStackTrace();
-        }
-
-        return result;
+    // download the image located at imageURL into outputFile
+    private static void downloadImage(String imageURL, Path outputFile)
+            throws IOException {
+        BufferedImage image = ImageIO.read(new URL(imageURL));
+        // TODO: Decide if "JPEG" needs refactoring into a constants container.
+        ImageIO.write(image, "JPEG", Files.newOutputStream(outputFile));
     }
 
     private static String generateRandomString() {
         Random rand = new Random();
-        String randomString = "";
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             char c = (char) ('a' + rand.nextInt(26));
-            randomString += c;
+            builder.append(c);
         }
-        return randomString;
+        return builder.toString();
     }
-
-    /**
-     * Finds the duplicates (if any) for an image at a provided URL.
-     * TODO: overload method in case similarity coefficient is required.
-     *
-     * @param imageUrl
-     * @param filePath
-     * @throws IOException
-     */
-    public static void findDuplicates(String imageUrl, String filePath) throws IOException {
-        String imagePath = filePath + "/" + generateRandomString() + ".jpeg";
-
-        String folderPath = filePath + "/images";
-        File folder = new File(folderPath);
-
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-        saveImage(imageUrl, imagePath);
-        List<String> urlArray = readURLTextFile(filePath + "/url.txt");
-
-        for (String s : urlArray) {
-            String fileName = generateRandomString() + ".jpeg";
-            saveImage(s, folderPath + "/" + fileName);
-        }
-
-        File[] listOfFiles = folder.listFiles();
-        File ogImage = new File(imagePath);
-        List<String> results = new ArrayList<>();
-
-        for (File file : listOfFiles) {
-            String normalizedPath = file.getAbsolutePath().toLowerCase();
-
-            if (file.isFile() && normalizedPath.endsWith(".jpeg")) { // kinda hackey way to just get jpegs :D
-                if (ComputeDhash.isIdentical(ogImage, file)) {
-                    results.add(file.getName());
-                }
-            }
-        }
-        System.out.println(results);
-
-    }
-
-    public static void main(String[] args) throws IOException {
-
-    }
-
 }
